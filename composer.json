@@ -1,0 +1,19 @@
+{
+    "name": "96qbhy/lazy-curd",
+    "description": "懒人",
+    "authors": [
+        {
+            "name": "qbhy",
+            "email": "96qbhy@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Qbhy\\LazyCurd\\" : "src"
+        }
+    },
+    "require-dev": {
+        "laravel/framework": "^6.0"
+    },
+    "require": {}
+}
