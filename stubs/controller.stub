@@ -1,0 +1,61 @@
+<?php
+
+namespace {namespace};
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
+use {model};
+use Illuminate\Http\Request;
+
+class {modelName}Controller extends Controller
+{
+    /**
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function filterData(Request $request)
+    {
+        $this->validate($request, $rules = {rules});
+
+        return $request->only(array_keys($rules));
+    }
+
+    public function create(Request $request)
+    {
+        $data = $this->filterData($request);
+
+        $instance = {modelName}::query()->create($data);
+
+        return $this->ok([
+            '{snakeName}' => $instance->toArray()
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $this->filterData($request);
+
+        $instance = {modelName}::query()->findOrFail($id);
+
+        $instance->update($data);
+
+        return $this->ok([
+            '{snakeName}' => $instance->toArray()
+        ]);
+    }
+
+    public function index(Request $request)
+    {
+        return $this->ok([
+            Str::plural('{snakeName}') => {modelName}::query()->simplePaginate($request->get('per_page', 16))->items()
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        {modelName}::query()->findOrFail($id)->delete();
+
+        return $this->ok();
+    }
+}
