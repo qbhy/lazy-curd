@@ -48,7 +48,7 @@ class {modelName}Controller extends Controller
     public function index(Request $request)
     {
         return $this->ok([
-            Str::plural('{snakeName}') => {modelName}::query()->simplePaginate($request->get('per_page', 16))->items()
+            '{snakeName}_list' => {modelName}::query()->simplePaginate($request->get('per_page', 16))->items()
         ]);
     }
 
