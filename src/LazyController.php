@@ -33,7 +33,8 @@ abstract class LazyController extends Controller
 
     public function filterData(Request $request, array $rules = null)
     {
-        $this->validate($request, $rules ?? $this->rules());
+        $rules = $rules ?? $this->rules();
+        $this->validate($request, $rules);
         return $request->only(array_keys($rules));
     }
 

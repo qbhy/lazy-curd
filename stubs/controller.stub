@@ -20,7 +20,7 @@ class {modelName}Controller extends LazyController
 
     public function create(Request $request)
     {
-        $model = parent::create($id);
+        $model = parent::create($request);
 
         return $this->ok([
             '{snakeName}' => $model
@@ -45,7 +45,7 @@ class {modelName}Controller extends LazyController
 
     public function index(Request $request)
     {
-        $items = parent::destroy($id);
+        $items = parent::index($request);
 
         return $this->ok([
             '{snakeName}_list' => $items
