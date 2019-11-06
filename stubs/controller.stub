@@ -23,7 +23,7 @@ class {modelName}Controller extends LazyController
         $model = parent::create($request);
 
         return $this->ok([
-            '{snakeName}' => $model
+            '{snakeName}' => $model->toArray()
         ]);
     }
 
@@ -32,7 +32,7 @@ class {modelName}Controller extends LazyController
         $model = parent::update($request, $id);
 
         return $this->ok([
-            '{snakeName}' => $model
+            '{snakeName}' => $model->toArray()
         ]);
     }
 
