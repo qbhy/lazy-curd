@@ -17,5 +17,12 @@
     },
     "require": {
         "ext-json": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qbhy\\LazyCurd\\LaravelServiceProvider"
+            ]
+        }
     }
 }
