@@ -36,6 +36,13 @@ class {modelName}Controller extends LazyController
         ]);
     }
 
+    public function show($id)
+    {
+        return $this->ok([
+            '{snakeName}' => $this->model()->findOrFail($id)->toArray()
+        ]);
+    }
+
     public function destroy($id)
     {
         parent::destroy($id);
