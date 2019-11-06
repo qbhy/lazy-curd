@@ -34,8 +34,8 @@ class LazyMakeCommand extends Command
     public function handle()
     {
         /** @var Model $model */
-        $model     = $this->laravel->make($this->argument('model'));
-        $namespace = $this->option('namespace') ?: 'App\\Http\\Controllers';
+        $model     = str_replace('/', '\\', $this->laravel->make($this->argument('model')));
+        $namespace = str_replace('/', '\\', $this->option('namespace') ?: 'App\\Http\\Controllers');
         $excludes  = $this->option('excludes') ?: 'id,created_at,updated_at';
 
         $rules          = $this->buildPhpScriptStr($this->buildRules($model, explode(',', $excludes)));

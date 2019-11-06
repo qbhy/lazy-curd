@@ -2,60 +2,53 @@
 
 namespace {namespace};
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 use {model};
 use Illuminate\Http\Request;
+use Qbhy\LazyCurd\LazyController;
 
-class {modelName}Controller extends Controller
+class {modelName}Controller extends LazyController
 {
-    /**
-     * @param Request $request
-     * @return array
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function filterData(Request $request)
+    public function rules(): array
     {
-        $this->validate($request, $rules = {rules});
+        return {rules};
+    }
 
-        return $request->only(array_keys($rules));
+    public function model()
+    {
+        return new {modelName}();
     }
 
     public function create(Request $request)
     {
-        $data = $this->filterData($request);
-
-        $instance = {modelName}::query()->create($data);
+        $model = parent::create($id);
 
         return $this->ok([
-            '{snakeName}' => $instance->toArray()
+            '{snakeName}' => $model
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $data = $this->filterData($request);
-
-        $instance = {modelName}::query()->findOrFail($id);
-
-        $instance->update($data);
+        $model = parent::update($request, $id);
 
         return $this->ok([
-            '{snakeName}' => $instance->toArray()
-        ]);
-    }
-
-    public function index(Request $request)
-    {
-        return $this->ok([
-            '{snakeName}_list' => {modelName}::query()->simplePaginate($request->get('per_page', 16))->items()
+            '{snakeName}' => $model
         ]);
     }
 
     public function destroy($id)
     {
-        {modelName}::query()->findOrFail($id)->delete();
+        parent::destroy($id);
 
         return $this->ok();
+    }
+
+    public function index(Request $request)
+    {
+        $items = parent::destroy($id);
+
+        return $this->ok([
+            '{snakeName}_list' => $items
+        ]);
     }
 }

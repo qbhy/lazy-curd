@@ -15,5 +15,7 @@
     "require-dev": {
         "laravel/framework": "^6.0"
     },
-    "require": {}
+    "require": {
+        "ext-json": "*"
+    }
 }
