@@ -7,15 +7,6 @@
 $ composer require 96qbhy/lazy-curd
 ```
 
-## 配置 - configuration
-```php
-    protected $commands = [
-        // ...
-        Qbhy\LazyCurd\LazyMakeCommand::class,
-    ];
-```
-> 在 app/Console/Kernel.php 的 $commands 中添加
-
 ## 使用 - usage
 ```bash
 $ php artisan lazy:make App\\Models\\Media
