@@ -2,6 +2,7 @@
 
 namespace Qbhy\LazyCurd;
 
+use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\ValidationException;
 
 abstract class LazyController extends Controller
 {
@@ -70,21 +72,36 @@ abstract class LazyController extends Controller
      */
     public function filterable(Request $request, $builder = null, array $rules = null)
     {
+        $rules   = $rules ?? json_decode(str_replace('required', 'nullable', json_encode($this->rules())), true);
         $builder = $builder ?? $this->model();
-        $rules   = json_decode(str_replace('required', 'nullable', json_encode($rules ?? $this->rules())), true);
 
-        $this->validate($request, $rules + [
+        return self::filter($request, $builder, $rules);
+    }
+
+    /**
+     * @param Request $request
+     * @param Builder $builder
+     * @param array   $rules
+     * @return mixed
+     * @throws ValidationException
+     */
+    public static function filter(Request $request, $builder, array $rules)
+    {
+        /** @var \Illuminate\Validation\Factory $validator */
+        $validator = app(Factory::class);
+        $validator->make($request->all(), $rules + [
+                'id'           => ['integer', 'min:1', 'nullable'],
                 'keyword'      => ['string', 'max:255', 'nullable'],
                 'search_range' => ['string', 'max:512', 'required_with:keyword'],
-            ]);
+            ])->validate();
 
         $condition = $request->only(array_keys($rules));
 
-        return $builder->where($condition)->when($request->get('keyword'), function (Builder $builder, $keyword) use ($request, $condition) {
+        return $builder->where($condition)->when($request->get('keyword'), function (Builder $builder, $keyword) use ($request, $condition, $rules) {
             $range = explode(',', $request->get('search_range'));
-            $builder->where(function (Builder $builder) use ($keyword, $range, $condition) {
+            $builder->where(function (Builder $builder) use ($keyword, $range, $condition, $rules) {
                 foreach ($range as $item) {
-                    if (!array_key_exists($item, $condition)) {
+                    if (!array_key_exists($item, $condition) && isset($rules[$item])) {
                         $builder->orWhere($item, 'like', "%{$keyword}%");
                     }
                 }
@@ -92,4 +109,5 @@ abstract class LazyController extends Controller
             });
         });
     }
+
 }
