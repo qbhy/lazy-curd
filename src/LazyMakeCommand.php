@@ -135,11 +135,9 @@ class LazyMakeCommand extends Command
                             case 'integer':
                             case 'bigint':
                             case 'smallint':
+                            case 'boolean':
                                 $rule[] = 'integer';
                                 $column->getUnsigned() ? ($rule[] = Str::contains($name, '_id') ? 'min:1' : 'min:0') : null;
-                                break;
-                            case 'boolean':
-                                $rule[] = 'boolean';
                                 break;
                             case 'decimal':
                             case 'float':
