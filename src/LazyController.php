@@ -2,7 +2,6 @@
 
 namespace Qbhy\LazyCurd;
 
-use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -87,9 +86,7 @@ abstract class LazyController extends Controller
      */
     public static function filter(Request $request, $builder, array $rules)
     {
-        /** @var \Illuminate\Validation\Factory $validator */
-        $validator = app(Factory::class);
-        $validator->make($request->all(), $rules + [
+        validator($request->all(), $rules + [
                 'id'           => ['integer', 'min:1', 'nullable'],
                 'keyword'      => ['string', 'max:255', 'nullable'],
                 'search_range' => ['string', 'max:512', 'required_with:keyword'],
