@@ -60,7 +60,7 @@ abstract class LazyController extends Controller
 
     public function index(Request $request)
     {
-        return $this->filterable($request, $this->model())->simplePaginate()->items();
+        return $this->filterable($request, $this->model())->simplePaginate($request->get('per_page', 16))->items();
     }
 
     /**
@@ -109,5 +109,4 @@ abstract class LazyController extends Controller
             });
         });
     }
-
 }
