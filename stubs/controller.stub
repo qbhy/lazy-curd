@@ -5,6 +5,7 @@ namespace {namespace};
 use {model};
 use Illuminate\Http\Request;
 use Qbhy\LazyCurd\LazyController;
+use Qbhy\LazyCurd\RuleProvider;
 
 class {modelName}Controller extends LazyController
 {
