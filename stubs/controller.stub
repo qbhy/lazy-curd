@@ -10,7 +10,9 @@ class {modelName}Controller extends LazyController
 {
     public function rules(): array
     {
-        return {rules};
+        $model = $this->model();
+
+        return $model instanceof RuleProvider ? $model->getRules() : {rules};
     }
 
     public function model()
