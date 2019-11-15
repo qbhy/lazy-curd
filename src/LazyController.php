@@ -81,7 +81,7 @@ abstract class LazyController extends Controller
      * @param Request $request
      * @param Builder $builder
      * @param array   $rules
-     * @return mixed
+     * @return Builder
      * @throws ValidationException
      */
     public static function filter(Request $request, $builder, array $rules)
