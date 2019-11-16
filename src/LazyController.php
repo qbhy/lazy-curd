@@ -110,7 +110,17 @@ abstract class LazyController extends Controller
                 foreach ($condition as $column => $value) {
                     $rules = explode(',', $value);
                     if (count($rules) === 1) {
-                        $builder->where($column, $rules[0]);
+                        switch ($rules[0]) {
+                            case 'is-null':
+                                $builder->whereNull($column);
+                                break;
+                            case 'not-null':
+                                $builder->whereNotNull($column);
+                                break;
+                            default:
+                                $builder->where($column, $rules[0]);
+                                break;
+                        }
                     } else {
                         switch ($rules[0]) {
                             case '<>':
@@ -125,12 +135,6 @@ abstract class LazyController extends Controller
                                 break;
                             case 'not-in':
                                 $builder->whereNotIn($column, Arr::except($rules, [0]));
-                                break;
-                            case 'is-null':
-                                $builder->whereNull($column);
-                                break;
-                            case 'not-null':
-                                $builder->whereNotNull($column);
                                 break;
                         }
                     }
