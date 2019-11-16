@@ -127,10 +127,10 @@ abstract class LazyController extends Controller
                                 $builder->whereNotIn($column, Arr::except($rules, [0]));
                                 break;
                             case 'is-null':
-                                $builder->whereNull($column, $rules[1]);
+                                $builder->whereNull($column);
                                 break;
                             case 'not-null':
-                                $builder->whereNotNull($column, $rules[1]);
+                                $builder->whereNotNull($column);
                                 break;
                         }
                     }
