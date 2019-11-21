@@ -108,36 +108,7 @@ abstract class LazyController extends Controller
         return $builder
             ->where(function (Builder $builder) use ($condition) {
                 foreach ($condition as $column => $value) {
-                    $rules = explode(',', $value);
-                    if (count($rules) === 1) {
-                        switch ($rules[0]) {
-                            case 'is-null':
-                                $builder->whereNull($column);
-                                break;
-                            case 'not-null':
-                                $builder->whereNotNull($column);
-                                break;
-                            default:
-                                $builder->where($column, $rules[0]);
-                                break;
-                        }
-                    } else {
-                        switch ($rules[0]) {
-                            case '<>':
-                            case '>':
-                            case '>=':
-                            case '<':
-                            case '<=':
-                                $builder->where($column, $rules[0], $rules[1]);
-                                break;
-                            case 'in':
-                                $builder->whereIn($column, Arr::except($rules, [0]));
-                                break;
-                            case 'not-in':
-                                $builder->whereNotIn($column, Arr::except($rules, [0]));
-                                break;
-                        }
-                    }
+                    $builder = self::addCondition($builder, $column, $value);
                 }
             })
             ->when($request->get('keyword'), function (Builder $builder, $keyword) use ($request, $condition, $rules) {
@@ -151,5 +122,44 @@ abstract class LazyController extends Controller
                     return $builder;
                 });
             });
+    }
+
+    /**
+     * @param Builder $builder
+     * @return Builder
+     */
+    public static function addCondition(&$builder, $column, $value)
+    {
+        $rules = explode(',', $value);
+        if (count($rules) === 1) {
+            switch ($rules[0]) {
+                case 'is-null':
+                    $builder->whereNull($column);
+                    break;
+                case 'not-null':
+                    $builder->whereNotNull($column);
+                    break;
+                default:
+                    $builder->where($column, $rules[0]);
+                    break;
+            }
+        } else {
+            switch ($rules[0]) {
+                case '<>':
+                case '>':
+                case '>=':
+                case '<':
+                case '<=':
+                    $builder->where($column, $rules[0], $rules[1]);
+                    break;
+                case 'in':
+                    $builder->whereIn($column, Arr::except($rules, [0]));
+                    break;
+                case 'not-in':
+                    $builder->whereNotIn($column, Arr::except($rules, [0]));
+                    break;
+            }
+        }
+        return $builder;
     }
 }
