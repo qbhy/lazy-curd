@@ -152,6 +152,12 @@ abstract class LazyController extends Controller
                 case '<=':
                     $builder->where($column, $rules[0], $rules[1]);
                     break;
+                case 'between':
+                    $builder->whereBetween($column, Arr::except($rules, [0]));
+                    break;
+                case 'not-between':
+                    $builder->whereNotBetween($column, Arr::except($rules, [0]));
+                    break;
                 case 'in':
                     $builder->whereIn($column, Arr::except($rules, [0]));
                     break;
